@@ -17,7 +17,7 @@ type SentencePieceProcessor struct {
 	beginMaxTokens int
 }
 
-func Load(path string, tokenMax int) *SentencePieceProcessor {
+func Load(path string) *SentencePieceProcessor {
 	var sp SentencePieceProcessor
 	cPath := C.CString(path)
 	sp.index = C.loadSentencePieceProcessor(cPath)
