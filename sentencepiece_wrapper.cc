@@ -2,13 +2,13 @@
 #include <iostream>
 #include "sentencepiece_wrapper.h"
 #include "sentencepiece_processor.h"
-#include "error.h"
-#include <thread>
-#include <atomic>
 
 SentencePieceProcessorGo loadSentencePieceProcessor(char *path) {
   sentencepiece::SentencePieceProcessor *sp = new sentencepiece::SentencePieceProcessor();
-  sp->Load(std::string(path));
+  auto status = sp->Load(std::string(path));
+  if (!status.ok()) {
+    return NULL;
+  }
   return (void*)sp;
 }
 
