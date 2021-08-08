@@ -1,6 +1,6 @@
 package sentencepiecego
 
-// #cgo LDFLAGS: -lsentencepiece -lstdc++ -lm
+// #cgo LDFLAGS: -lsentencepiecego -lstdc++
 // #include <stdlib.h>
 // typedef void* SentencePieceProcessorGo;
 // SentencePieceProcessorGo loadSentencePieceProcessor(char *path);
@@ -9,6 +9,7 @@ package sentencepiecego
 import "C"
 import (
 	"errors"
+	"fmt"
 	"unsafe"
 )
 
@@ -17,13 +18,16 @@ type SentencePieceProcessor struct {
 	beginMaxTokens int
 }
 
-func Load(path string) *SentencePieceProcessor {
+func Load(path string) (*SentencePieceProcessor, error) {
 	var sp SentencePieceProcessor
 	cPath := C.CString(path)
 	sp.index = C.loadSentencePieceProcessor(cPath)
+	if sp.index == nil {
+		return &sp, fmt.Errorf("Can not load model: %s\n", path)
+	}
 	sp.beginMaxTokens = 128
 	C.free(unsafe.Pointer(cPath))
-	return &sp
+	return &sp, nil
 }
 
 func (sp *SentencePieceProcessor) Encode(text string) ([]int, error) {
@@ -31,13 +35,13 @@ func (sp *SentencePieceProcessor) Encode(text string) ([]int, error) {
 	var ids []int
 	size, ids = sp.encode(text, sp.beginMaxTokens)
 	if size < 0 {
-		return ids, errors.New("Error in encode!")
+		return ids, errors.New("Encode error!")
 	}
 	// If size exceed beginMaxTokens, we extend ids size again!
 	if size > sp.beginMaxTokens {
 		size, ids = sp.encode(text, size)
 		if size < 0 {
-			return ids, errors.New("Error in encode!")
+			return ids, errors.New("Encode error!")
 		}
 	}
 	return ids, nil
