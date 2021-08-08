@@ -27,7 +27,10 @@ import (
 
 func main() {
         // Load pre-trained spm model
-        m := sentencepiecego.Load("spm.model")
+        m, err := sentencepiecego.Load("spm.model")
+        if err != nil {
+                panic(err)
+        }
         // Encode text to ids([]int) with spm model
         ids, err := m.Encode("test")
         if err != nil {
