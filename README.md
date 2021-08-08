@@ -1,4 +1,4 @@
-# HNSWGO
+# SENTENCEPIECEGO
 This is a golang interface of [sentencepiece](https://github.com/google/sentencepiece) for serving. For more information, please follow google sentencepiece.
 
 # Usages
