@@ -4,7 +4,7 @@ This is a golang interface of [sentencepiece](https://github.com/google/sentence
 # Usages
 1. Download shared library
 ```bash
-sudo wget https://github.com/evan176/sentencepiecego/releases/tag/v0.1.96-x86-64 -P /usr/local/lib/
+sudo wget https://github.com/evan176/sentencepiecego/releases/download/v0.1.96-x86-64/libsentencepiecego.so -P /usr/local/lib/
 ldconfig
 ```
 2. Export CGO variable
